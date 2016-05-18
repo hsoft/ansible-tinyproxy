@@ -1,0 +1,11 @@
+- name: Ensure we have proper allows in config
+  lineinfile:
+    dest: /etc/tinyproxy.conf
+    line: "Allow {{ item }}"
+    insertafter: >
+      ^(#\s*)?Allow\s.*$
+  with_items: "{{ tinyproxy_allows }}"
+  notify: tinyproxy restart
+
+- name: Ensure that the service is enabled
+  service: name=tinyproxy state=started enabled=yes
